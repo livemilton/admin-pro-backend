@@ -14,12 +14,25 @@ const { generarJWT } = require('../helpers/jwt');
 
 const getUsuarios = async(req, res) =>{
 
-    //filtros a mostrar en el get, se cambio en el schema el _id por uid
-    const usuarios = await Usuario.find({}, 'nombre email role google');
+    //usando promise.all del ecma script 6 
+    //desestructurar el usuario y total para que se ejecuten a la vez
+    //usar PAGINACION con metodo skip y limit y declarando la constante
+
+    const desde = Number (req.query.desde) || 0;
+
+    const [ usuarios, total ]= await Promise.all([
+        Usuario 
+            .find({}, 'nombre email role google img')
+            .skip ( desde )
+            .limit ( 5 ),
+        Usuario.countDocuments()
+    ])
+    
 
     res.json({
         ok:true,
         usuarios: usuarios,
+        total: total
     });
 
 }
