@@ -13,6 +13,9 @@ const app = express();
 //Configurar CORS
 app.use( cors() );
 
+//Carpeta pública para google sign
+app.use( express.static('public') );
+
 // Lectura y parseo del body
 app.use( express.json());
 
